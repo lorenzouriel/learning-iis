@@ -1,0 +1,34 @@
+# Vagrant configuration file (Vagrantfile) for setting up a Windows Server 2019 VM
+
+Vagrant.configure("2") do |config|
+  # Specify the base box to use
+  config.vm.box = "gusztavvargadr/windows-server-2019-standard"
+
+  # Set the communicator to WinRM (Windows Remote Management)
+  config.vm.communicator = "winrm"
+
+  # Forward ports from the host machine to the guest VM
+  # Forward host port 8060 to guest port 80 (HTTP)
+  config.vm.network "forwarded_port", guest: 80, host: 8060
+  # Forward host port 8443 to guest port 443 (HTTPS)
+  config.vm.network "forwarded_port", guest: 443, host: 8443
+  # Forward host port 14330 to guest port 1433 (SQL Server)
+  config.vm.network "forwarded_port", guest: 1433, host: 14330
+
+  # Set up a private network with DHCP
+  config.vm.network "private_network", type: "dhcp"
+
+  # Configure the VirtualBox provider
+  config.vm.provider "virtualbox" do |vb|
+    # Allocate 8096 MB of memory to the VM
+    vb.memory = "8096"
+    # Allocate 2 CPU cores to the VM
+    vb.cpus = "2"
+    # Set the name of the VM in VirtualBox
+    vb.name = "IIS-WS-2019"
+  end
+
+  # Set the hostname of the VM
+  config.vm.hostname = "IIS-WS-2019"
+
+end
